@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: white;
+  cursor: default;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 22px;
+  margin: 0;
+  padding: 0;
+}
+
+dd,
+dt,
+p,
+li,
+span {
+  line-height: 1.5em;
+}
+
+ul,
+p {
+  margin: 0;
+}
+
+span,
+img {
+  vertical-align: middle;
+}
