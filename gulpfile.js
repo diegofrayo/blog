@@ -3,6 +3,8 @@
 const gulp = require('gulp');
 const fs = require('fs');
 const g = require('gulp-load-plugins')({ lazy: false });
+const browserSync = require('browser-sync').create();
+const showdown = require('showdown');
 
 const HTML_MIN_OPTS = {
   removeComments: true,
@@ -12,91 +14,137 @@ const HTML_MIN_OPTS = {
   removeRedundantAttributes: true,
 };
 
-let destPath;
-let environment;
-let settings;
-
-try {
-  settings = JSON.parse(fs.readFileSync('./config.app.json', 'utf8'));
-} catch (error) {
-  g.util.log(`MY LOG ==> ' ${error}`);
-  process.exit();
-}
+const mdParser = new showdown.Converter({ ghCompatibleHeaderId: true, rawHeaderId: true });
+let destPath = './build/blog';
+let environment = 'development';
 
 //----------------------------------------------------
 //------------------- Util Functions -----------------
-const createCSSTags = cssSources => {
-  const createTag = url => `<link href="${url}" rel="stylesheet"/>`;
-  return cssSources.map(url => createTag(url)).join('\n\t');
+const createHTMLEntries = () => {
+
+  let html = '';
+  const entries = JSON.parse(fs.readFileSync('./assets/entries.json', 'utf8')).data;
+  const extension = environment === 'development' ? '.html' : '';
+
+  return entries
+    .map(
+      entry => `<article class="entry">
+        <p class="date">${entry.date}</p>
+        <a href="/blog/${entry.slug}${extension}" class="title">${entry.title}</a>
+        <section class="tags-container">
+          ${entry.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </section>
+      </article>`
+    )
+    .join('');
 };
 
-const createJSTags = jsSources => {
-  const createTag = url => `<script src="${url}"></script>`;
-  return jsSources.map(url => createTag(url)).join('\n\t');
+const createServer = () => {
+  browserSync.init({
+    server: {
+      baseDir: './build',
+    },
+  });
 };
 
 //----------------------------------------------------
 //------------------- JS Tasks -----------------------
 gulp.task('build-js', () => {
-  return gulp.src('./build/js/bundle.js').pipe(gulp.dest(`${destPath}/js`));
+
+  let stream = gulp
+    .src(`${__dirname}/src/js/main.js`)
+    .pipe(g.babel({ presets: ['env'] }));
+
+  if (environment === 'production') {
+    stream = stream.pipe(g.uglify());
+  }
+
+  stream.pipe(gulp.dest(`${destPath}/js`));
 });
 
 //----------------------------------------------------
 //------------------- CSS Tasks -----------------------
 gulp.task('build-css', () => {
-  return gulp.src('./build/css/styles.css').pipe(gulp.dest(`${destPath}/css`));
+
+  let stream = gulp
+    .src(`${__dirname}/src/styles/main.less`)
+    .pipe(g.less())
+    .pipe(g.rename('styles.css'));
+
+  if (environment === 'production') {
+    stream = stream.pipe(g.minifyCss());
+  }
+
+  stream.pipe(gulp.dest(`${destPath}/css`));
 });
 
 //----------------------------------------------------
 //------------------- HTML Tasks ---------------------
-gulp.task('build-html', () => {
+gulp.task('build-homepage', () => {
 
-  const timestamp = +new Date();
-  const stream = gulp.src('./src/index.html');
-  let cssSources, jsSources;
+  let stream = gulp
+    .src('./src/index.html')
+    .pipe(g.replace('<!-- HTML -->', createHTMLEntries()));
 
-  if (environment === 'development') {
-
-    cssSources = [];
-    jsSources = ['/js/bundle.js'];
-
-    return stream
-      .pipe(g.replace('<!-- INJECT:css -->', createCSSTags(cssSources)))
-      .pipe(g.replace('<!-- INJECT:js -->', createJSTags(jsSources)))
-      .pipe(gulp.dest(destPath));
-
-  } else {
-
-    cssSources = [`/css/styles.css?tm=${timestamp}`];
-    jsSources = [`/js/bundle.js?tm=${timestamp}`];
-
-    return stream
-      .pipe(g.replace('<!-- INJECT:css -->', createCSSTags(cssSources)))
-      .pipe(g.replace('<!-- INJECT:js -->', createJSTags(jsSources)))
-      .pipe(g.htmlmin(HTML_MIN_OPTS))
-      .pipe(gulp.dest(destPath));
-
+  if (environment === 'production') {
+    stream = stream.pipe(g.htmlmin(HTML_MIN_OPTS));
   }
 
+  stream.pipe(gulp.dest(environment === 'development' ? destPath.replace('/blog', '') : destPath));
+});
+
+gulp.task('build-entries', () => {
+
+  const entries = JSON.parse(fs.readFileSync('./assets/entries.json', 'utf8')).data;
+
+  entries.forEach(entry => {
+    const html = mdParser.makeHtml(fs.readFileSync(`./assets/md/${entry.slug}.md`, 'utf8'));
+    gulp
+      .src('./src/entry.html')
+      .pipe(g.replace('<!-- HTML -->', html))
+      .pipe(g.replace('<!-- TITLE -->', entry.title))
+      .pipe(g.replace('<!-- DATE -->', entry.date))
+      .pipe(g.htmlmin(HTML_MIN_OPTS))
+      .pipe(g.rename(`${entry.slug}.html`))
+      .pipe(gulp.dest(destPath));
+  });
 });
 
 //----------------------------------------------------
 //------------------- Copy Assets Tasks --------------
 gulp.task('copy-assets', () => {
   gulp.src('./assets/images/**/*').pipe(gulp.dest(`${destPath}/images`));
-  gulp.src('./assets/md/**/*').pipe(gulp.dest(`${destPath}/md`));
 });
 
 //-------------------------------------------------------
-//----------------- Builds Tasks ------------------------
-gulp.task('build-dev', () => {
-  environment = 'development';
-  destPath = settings[environment].dest_path;
-  g.runSequence('build-html', 'copy-assets');
+//----------------- Main Tasks --------------------------
+gulp.task('watch', ['build-homepage', 'build-css', 'build-js', 'build-entries', 'copy-assets'], () => {
+
+  createServer();
+
+  gulp
+    .watch('./src/styles/*.less', ['build-css'])
+    .on('change', browserSync.reload);
+
+  gulp
+    .watch('./src/js/*.js', ['build-js'])
+    .on('change', browserSync.reload);
+
+  gulp
+    .watch('./src/index.html', ['build-homepage'])
+    .on('change', browserSync.reload);
+
+  gulp
+    .watch(['./assets/md/*', './src/entry.html'], ['build-entries'])
+    .on('change', browserSync.reload);
 });
 
-gulp.task('build-live', () => {
+gulp.task('default', ['watch']);
+
+//-------------------------------------------------------
+//----------------- Builds Tasks ------------------------
+gulp.task('build-production', () => {
   environment = 'production';
-  destPath = settings[environment].dest_path;
-  g.runSequence('build-js', 'build-css', 'build-html', 'copy-assets');
+  destPath = './../website-router/public/blog';
+  gulp.start('build-homepage', 'build-css', 'build-js', 'build-entries', 'copy-assets');
 });

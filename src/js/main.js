@@ -5,7 +5,6 @@
     ENVIRONMENT: window.location.href.indexOf('localhost') !== -1 ? 'development' : 'production',
   };
 
-
   //------------------- Events -------------------//
   const initGA = () => {
 

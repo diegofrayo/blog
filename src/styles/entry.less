@@ -1,3 +1,25 @@
+.link-go-back {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.entry-title {
+  margin: 3em 0 0.5em;
+  text-align: center;
+}
+
+.entry-details {
+  color: lighten(black, 30%);
+  margin-bottom: 3em;
+  text-align: right;
+
+  a {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}
+
 #md-viewer {
   @spacing: 20px;
 
@@ -32,6 +54,7 @@
 
   p {
     margin-bottom: @spacing / 2;
+    word-wrap: break-word;
   }
 
   code {
@@ -49,6 +72,7 @@
   pre {
     border-bottom: 10px solid darken(white, 5%);
     border: 1px solid darken(white, 10%);
+    border-bottom: 5px solid darken(white, 10%);
     overflow: auto;
     padding: 20px;
 
