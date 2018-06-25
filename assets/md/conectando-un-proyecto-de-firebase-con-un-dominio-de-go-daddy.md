@@ -28,7 +28,7 @@ En este tutorial quiero explicar como conectar un dominio que tengamos en **Go D
 
   ![Configuración de nuestro dominio](/blog/images/posts/conectando-un-proyecto-de-firebase-con-un-dominio-de-go-daddy/2.png "Configuración de nuestro dominio")
 
-5. Ahora debemos esperar un par de horas hasta que los cambios surgan efecto. *Yo esperé alrededor de 4 horas*.
+5. Ahora debemos esperar un par de horas hasta que los cambios surtan efecto. *Yo esperé alrededor de 4 horas*.
 
 Después de ejecutar estos pasos, ya tendremos nuestro dominio de **Go Daddy** conectado con nuestro proyecto de **Firebase.**
 
@@ -75,8 +75,8 @@ Para desplegar nuestro sitio o aplicación en **Firebase Hosting**, debemos segu
 
 ## Para finalizar
 
-Cuando estén creando los **Registros TXT y A** en **Go Daddy**, es necesario que sean pacientes y esperen un tiempo prudente mientras los cambios surgen efecto, yo tuve que esperar un par de horas hasta que la conexión entre **Firebase** y **Go Daddy** fuera válida.
+Cuando estén creando los **Registros TXT y A** en **Go Daddy**, es necesario que sean pacientes y esperen un tiempo prudente mientras los cambios surten efecto, yo tuve que esperar un par de horas hasta que la conexión entre **Firebase** y **Go Daddy** fuera válida.
 
-Como pueden ver, usando **Firebase Hosting** podemos alojar de manera fácil y simple un *Sitio Web* o un *SPA* en la nube y obtener un *certificado SSL* gratis. Yo uso este servicio para alojar mi sitio web `diegofrayo.com`.
+Como pueden ver, usando **Firebase Hosting** podemos alojar de manera fácil y simple un Sitio Web o un SPA en la nube, además de obtener un certificado SSL gratis. Yo uso este servicio para alojar mi sitio web `diegofrayo.com`.
 
 Espero que te haya servido este tutorial, hasta la próxima...

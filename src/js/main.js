@@ -1,11 +1,9 @@
 ((window, document) => {
 
-  //------------------- Global Vars -------------------//
   const APP_CONFIGURATION = {
     ENVIRONMENT: window.location.href.indexOf('localhost') !== -1 ? 'development' : 'production',
   };
 
-  //------------------- Events -------------------//
   const initGA = () => {
 
     (function (i, s, o, g, r, a, m) {
@@ -28,12 +26,6 @@
       title: document.title,
     });
     ga('website.send', 'pageview');
-
-    let gaElements = document.getElementsByClassName('ga-element');
-    for (let i = 0, length = gaElements.length; i < length; i++) {
-      gaElements[i].addEventListener('click', gaElementClick, false);
-    }
-    gaElements = null;
   };
 
   const gaElementClick = event => {
@@ -70,6 +62,13 @@
     return false;
   };
 
+  const openNewWindow = () => {
+    const url = event.currentTarget.getAttribute('src');
+    if (!url) return;
+    const win = window.open(url, '_blank');
+    win.focus();
+  };
+
   const configurePostLinks = () => {
 
     let mdViewerLinks = document.querySelectorAll('#md-viewer a');
@@ -82,18 +81,42 @@
     mdViewerLinks = null;
   };
 
+  const configurePostImages = () => {
+
+    let mdViewerImages = document.querySelectorAll('#md-viewer img');
+
+    for (let i = 0, length = mdViewerImages.length; i < length; i++) {
+      const image = mdViewerImages[i];
+      image.addEventListener('click', openNewWindow, false);
+    }
+
+    mdViewerImages = null;
+  };
+
+  const configureGAEvents = () => {
+
+    let gaElements = document.getElementsByClassName('ga-element');
+
+    for (let i = 0, length = gaElements.length; i < length; i++) {
+      gaElements[i].addEventListener('click', gaElementClick, false);
+    }
+
+    gaElements = null;
+  };
+
   const onReadyHandler = () => {
 
     const isLoggedIn = getCookie('auth');
 
     if (APP_CONFIGURATION.ENVIRONMENT === 'production' && isLoggedIn === false) {
       initGA();
+      configureGAEvents();
     }
 
     configurePostLinks();
+    configurePostImages();
   };
 
-  //-------------------onReadyCallback-------------------//
   document.addEventListener('DOMContentLoaded', onReadyHandler, false);
 
 })(window, document);
