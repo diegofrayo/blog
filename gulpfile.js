@@ -23,16 +23,16 @@ let environment = 'development';
 const createHTMLEntries = () => {
 
   let html = '';
-  const entries = JSON.parse(fs.readFileSync('./assets/entries.json', 'utf8')).data;
+  const posts = JSON.parse(fs.readFileSync('./assets/posts.json', 'utf8')).data;
   const extension = environment === 'development' ? '.html' : '';
 
-  return entries
+  return posts
     .map(
-      entry => `<article class="entry">
-        <p class="date">${entry.date}</p>
-        <a href="/blog/${entry.slug}${extension}" class="title">${entry.title}</a>
+      post => `<article class="post">
+        <p class="date">${post.date}</p>
+        <a href="/blog/${post.slug}${extension}" class="title">${post.title}</a>
         <section class="tags-container">
-          ${entry.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+          ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
         </section>
       </article>`
     )
@@ -93,19 +93,22 @@ gulp.task('build-homepage', () => {
   stream.pipe(gulp.dest(environment === 'development' ? destPath.replace('/blog', '') : destPath));
 });
 
-gulp.task('build-entries', () => {
+gulp.task('build-posts', () => {
 
-  const entries = JSON.parse(fs.readFileSync('./assets/entries.json', 'utf8')).data;
+  const posts = JSON.parse(fs.readFileSync('./assets/posts.json', 'utf8')).data;
 
-  entries.forEach(entry => {
-    const html = mdParser.makeHtml(fs.readFileSync(`./assets/md/${entry.slug}.md`, 'utf8'));
+  posts.forEach(post => {
+    const html = mdParser.makeHtml(fs.readFileSync(`./assets/md/${post.slug}.md`, 'utf8'));
     gulp
-      .src('./src/entry.html')
+      .src('./src/post.html')
       .pipe(g.replace('<!-- HTML -->', html))
-      .pipe(g.replace('<!-- TITLE -->', entry.title))
-      .pipe(g.replace('<!-- DATE -->', entry.date))
+      .pipe(g.replace('<!-- TITLE -->', post.title))
+      .pipe(g.replace('<!-- DATE -->', post.date))
+      .pipe(g.replace('<!-- SLUG -->', post.slug))
+      .pipe(g.replace('<!-- IMAGE -->', post.image))
+      .pipe(g.replace('<!-- DESCRIPTION -->', post.description))
       .pipe(g.htmlmin(HTML_MIN_OPTS))
-      .pipe(g.rename(`${entry.slug}.html`))
+      .pipe(g.rename(`${post.slug}.html`))
       .pipe(gulp.dest(destPath));
   });
 });
@@ -113,12 +116,14 @@ gulp.task('build-entries', () => {
 //----------------------------------------------------
 //------------------- Copy Assets Tasks --------------
 gulp.task('copy-assets', () => {
-  gulp.src('./assets/images/**/*').pipe(gulp.dest(`${destPath}/images`));
+  gulp.src('./assets/images/**/*')
+    .pipe(g.imagemin())
+    .pipe(gulp.dest(`${destPath}/images`));
 });
 
 //-------------------------------------------------------
 //----------------- Main Tasks --------------------------
-gulp.task('watch', ['build-homepage', 'build-css', 'build-js', 'build-entries', 'copy-assets'], () => {
+gulp.task('watch', ['build-homepage', 'build-css', 'build-js', 'build-posts', 'copy-assets'], () => {
 
   createServer();
 
@@ -135,7 +140,7 @@ gulp.task('watch', ['build-homepage', 'build-css', 'build-js', 'build-entries', 
     .on('change', browserSync.reload);
 
   gulp
-    .watch(['./assets/md/*', './src/entry.html'], ['build-entries'])
+    .watch(['./assets/md/*', './src/post.html'], ['build-posts'])
     .on('change', browserSync.reload);
 });
 
@@ -146,5 +151,5 @@ gulp.task('default', ['watch']);
 gulp.task('build-production', () => {
   environment = 'production';
   destPath = './../website-router/public/blog';
-  gulp.start('build-homepage', 'build-css', 'build-js', 'build-entries', 'copy-assets');
+  gulp.start('build-homepage', 'build-css', 'build-js', 'build-posts', 'copy-assets');
 });

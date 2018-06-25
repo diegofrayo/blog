@@ -28,6 +28,25 @@
       title: document.title,
     });
     ga('website.send', 'pageview');
+
+    let gaElements = document.getElementsByClassName('ga-element');
+    for (let i = 0, length = gaElements.length; i < length; i++) {
+      gaElements[i].addEventListener('click', gaElementClick, false);
+    }
+    gaElements = null;
+  };
+
+  const gaElementClick = event => {
+
+    const elementNameClicked = event.currentTarget.getAttribute('data-element-name');
+    if (!elementNameClicked) return;
+
+    ga('website.send', {
+      hitType: 'event',
+      eventCategory: 'blog',
+      eventAction: 'click',
+      eventLabel: elementNameClicked,
+    });
   };
 
   const getCookie = cname => {
@@ -51,6 +70,18 @@
     return false;
   };
 
+  const configurePostLinks = () => {
+
+    let mdViewerLinks = document.querySelectorAll('#md-viewer a');
+
+    for (let i = 0, length = mdViewerLinks.length; i < length; i++) {
+      const link = mdViewerLinks[i];
+      link.setAttribute('target', '_blank');
+    }
+
+    mdViewerLinks = null;
+  };
+
   const onReadyHandler = () => {
 
     const isLoggedIn = getCookie('auth');
@@ -58,6 +89,8 @@
     if (APP_CONFIGURATION.ENVIRONMENT === 'production' && isLoggedIn === false) {
       initGA();
     }
+
+    configurePostLinks();
   };
 
   //-------------------onReadyCallback-------------------//

@@ -1,0 +1,126 @@
+.post-container {
+  .go-back-link {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .post-title {
+    margin: 3em 0 0.5em;
+    text-align: center;
+  }
+
+  .post-details {
+    color: lighten(black, 30%);
+    margin-bottom: 3em;
+    text-align: right;
+
+    a {
+      color: inherit;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+
+  #md-viewer {
+    @spacing: 20px;
+    margin-bottom: @spacing * 2.5;
+
+    a {
+      color: blue;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: @spacing;
+    }
+
+    h2 {
+      border-bottom: 1px solid darken(white, 10%);
+      font-size: 1.5em;
+      margin-bottom: @spacing / 2;
+      margin-top: @spacing * 2;
+      padding-bottom: @spacing / 2;
+      padding-left: @spacing;
+    }
+
+    ul {
+      list-style-type: square;
+      margin: 0;
+      margin-bottom: @spacing;
+      padding: 0;
+      padding-left: @spacing * 2;
+    }
+
+    p {
+      margin-bottom: @spacing / 2;
+      word-wrap: break-word;
+    }
+
+    code {
+      color: red;
+      font-weight: bold;
+
+      &::before {
+        content: '`';
+      }
+      &::after {
+        content: '`';
+      }
+    }
+
+    pre {
+      border-bottom: 10px solid darken(white, 5%);
+      border: 1px solid darken(white, 10%);
+      border-bottom: 5px solid darken(white, 10%);
+      overflow: auto;
+      padding: 20px;
+
+      code {
+        color: black;
+        font-size: 0.8em;
+        font-weight: 100;
+
+        &::before {
+          content: '';
+        }
+
+        &::after {
+          content: '';
+        }
+      }
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+
+    blockquote {
+      border-left: 5px solid darken(white, 50%);
+      color: darken(white, 50%);
+      margin-bottom: @spacing;
+      padding-left: 10px;
+    }
+  }
+
+  .footer {
+    border: 1px solid black;
+    font-size: 0.8em;
+    padding: 10px;
+    text-align: center;
+
+    .link {
+      display: inline-block;
+      margin: 0 5px;
+      vertical-align: middle;
+    }
+
+    .icon {
+      display: block;
+      width: 28px;
+    }
+  }
+}
