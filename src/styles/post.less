@@ -1,3 +1,5 @@
+@spacing: 0.8em;
+
 .post-container {
   .go-back-link {
     font-weight: bold;
@@ -22,7 +24,6 @@
   }
 
   #md-viewer {
-    @spacing: 20px;
     margin-bottom: @spacing * 2.5;
 
     a {
@@ -71,11 +72,10 @@
     }
 
     pre {
-      border-bottom: 10px solid darken(white, 5%);
       border: 1px solid darken(white, 10%);
       border-bottom: 5px solid darken(white, 10%);
       overflow: auto;
-      padding: 20px;
+      padding: @spacing;
 
       code {
         color: black;
@@ -110,7 +110,8 @@
   .footer {
     border: 1px solid black;
     font-size: 0.8em;
-    padding: 10px;
+    margin-bottom: @spacing * 2.5;
+    padding: @spacing;
     text-align: center;
 
     .link {

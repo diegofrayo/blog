@@ -68,7 +68,7 @@ Para desplegar nuestro sitio o aplicación en **Firebase Hosting**, debemos segu
 
   Podemos configurar mejor este archivo, por ejemplo, definiendo redirecciones, rewrites y otras cosas interesantes. En este [enlace](https://firebase.google.com/docs/hosting/full-config?authuser=0) pueden conocer un poco más sobre la configuración de este archivo.
 
-5. Para probar nuestro sitio o aplicación de manera local, debemos usar el comando `firebase serve`, el cual crear un servidor HTTP al cual podemos acceder desde [http://localhost:5000](http://localhost:5000).
+5. Para probar nuestro sitio o aplicación de manera local, debemos usar el comando `firebase serve`, el cual crea un servidor HTTP al que podemos acceder desde [http://localhost:5000](http://localhost:5000).
 
 6. Para desplegar nuestro sitio o aplicación en **Firebase Hosting**, simplemente debemos ejecutar el comando `firebase deploy`.
 
@@ -77,6 +77,6 @@ Para desplegar nuestro sitio o aplicación en **Firebase Hosting**, debemos segu
 
 Cuando estén creando los **Registros TXT y A** en **Go Daddy**, es necesario que sean pacientes y esperen un tiempo prudente mientras los cambios surten efecto, yo tuve que esperar un par de horas hasta que la conexión entre **Firebase** y **Go Daddy** fuera válida.
 
-Como pueden ver, usando **Firebase Hosting** podemos alojar de manera fácil y simple un Sitio Web o un SPA en la nube, además de obtener un certificado SSL gratis. Yo uso este servicio para alojar mi sitio web `diegofrayo.com`.
+Como pueden ver, usando **Firebase Hosting** podemos alojar de manera fácil y simple un proyecto web en la nube, además de obtener un certificado SSL gratis. Yo uso este servicio para alojar mi sitio web `diegofrayo.com`.
 
-Espero que te haya servido este tutorial, hasta la próxima...
+Espero que les haya servido este tutorial, hasta la próxima...
