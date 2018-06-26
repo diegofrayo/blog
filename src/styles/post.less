@@ -12,7 +12,7 @@
   }
 
   .post-details {
-    color: lighten(black, 30%);
+    color: @text-secundary;
     margin-bottom: 3em;
     text-align: right;
 
@@ -38,12 +38,12 @@
     }
 
     h2 {
-      border-bottom: 1px solid darken(white, 10%);
+      border-bottom: 1px solid @text-secundary;
       font-size: 1.5em;
       margin-bottom: @spacing / 2;
       margin-top: @spacing * 2;
       padding-bottom: @spacing / 2;
-      padding-left: @spacing;
+      padding-left: @spacing / 2;
     }
 
     ul {
@@ -61,6 +61,7 @@
 
     code {
       color: red;
+      font-size: 0.9em;
       font-weight: bold;
 
       &::before {
@@ -72,13 +73,13 @@
     }
 
     pre {
-      border: 1px solid darken(white, 10%);
-      border-bottom: 5px solid darken(white, 10%);
+      border: 1px solid @text-secundary;
+      border-bottom: 5px solid @text-secundary;
       overflow: auto;
       padding: @spacing;
 
       code {
-        color: black;
+        color: @text-primary;
         font-size: 0.8em;
         font-weight: 100;
 
@@ -100,15 +101,15 @@
     }
 
     blockquote {
-      border-left: 5px solid darken(white, 50%);
-      color: darken(white, 50%);
+      border-left: 5px solid @text-secundary;
+      color: @text-secundary;
       margin-bottom: @spacing;
       padding-left: 10px;
     }
   }
 
   .footer {
-    border: 1px solid black;
+    border: 1px solid @text-secundary;
     font-size: 0.8em;
     margin-bottom: @spacing * 2.5;
     padding: @spacing;
