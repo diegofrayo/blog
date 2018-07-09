@@ -20,10 +20,24 @@ let environment = 'development';
 
 //----------------------------------------------------
 //------------------- Util Functions -----------------
+const sortByDate = (a, b) => {
+
+  let aDate = a.date;
+  let bDate = b.date;
+
+  if (aDate === bDate) {
+    return 0;
+  } else if (aDate > bDate) {
+    return -1;
+  }
+
+  return 1;
+};
+
 const createHTMLEntries = () => {
 
   let html = '';
-  const posts = JSON.parse(fs.readFileSync('./assets/posts.json', 'utf8')).data;
+  const posts = JSON.parse(fs.readFileSync('./assets/posts.json', 'utf8')).data.sort(sortByDate);
   const extension = environment === 'development' ? '.html' : '';
 
   return posts
