@@ -11,14 +11,14 @@
         "En este tutorial quiero explicar como conectar un dominio que tengamos en Go Daddy con un proyecto de Firebase."
     },
     {
-      "title": "Configurando Sublime Text 3 en Mac OS para desarrollar con JavaScript y React",
-      "date": "2018/07/06",
-      "slug": "configurando-sublime-text-3-en-mac-os-para-desarrollar-con-javascript-y-react",
+      "title": "Configurando Sublime Text 3 para desarrollar proyectos con JavaScript y React",
+      "date": "2018/07/10",
+      "slug": "configurando-sublime-text-3-para-desarrollar-proyectos-con-javascript-y-react",
       "tags": ["tutorial", "sublime-text", "javascript", "react", "eslint", "prettier", "emmet"],
       "image":
-        "https://diegofrayo.com/blog/images/posts/configurando-sublime-text-3-en-mac-os-para-desarrollar-con-javascript-y-react/thumb.png",
+        "https://diegofrayo.com/blog/images/posts/configurando-sublime-text-3-para-desarrollar-proyectos-con-javascript-y-react/thumb.png",
       "description":
-        "En este tutorial quiero explicar como conectar un dominio que tengamos en Go Daddy con un proyecto de Firebase."
+        "En este tutorial quiero mostrar como configurar Sublime Text 3 para facilitar el desarrollo de proyectos con JavaScript y React."
     }
   ]
 }
