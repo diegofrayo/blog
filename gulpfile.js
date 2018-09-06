@@ -14,6 +14,7 @@ const HTML_MIN_OPTS = {
   removeRedundantAttributes: true,
 };
 
+const tm = new Date().getTime();
 const mdParser = new showdown.Converter({ ghCompatibleHeaderId: true, rawHeaderId: true });
 let destPath = './build/blog';
 let environment = 'development';
@@ -98,10 +99,12 @@ gulp.task('build-homepage', () => {
 
   let stream = gulp
     .src('./src/index.html')
-    .pipe(g.replace('<!-- HTML -->', createHTMLEntries()));
+    .pipe(g.replace('<!-- HTML -->', createHTMLEntries()))
+    .pipe(g.replace('<!-- TIMESTAMP -->', tm));
 
   if (environment === 'production') {
-    stream = stream.pipe(g.htmlmin(HTML_MIN_OPTS));
+    stream = stream
+      .pipe(g.htmlmin(HTML_MIN_OPTS))
   }
 
   stream.pipe(gulp.dest(environment === 'development' ? destPath.replace('/blog', '') : destPath));
@@ -121,6 +124,7 @@ gulp.task('build-posts', () => {
       .pipe(g.replace('<!-- SLUG -->', post.slug))
       .pipe(g.replace('<!-- IMAGE -->', post.image))
       .pipe(g.replace('<!-- DESCRIPTION -->', post.description))
+      .pipe(g.replace('<!-- TIMESTAMP -->', tm))
       .pipe(g.htmlmin(HTML_MIN_OPTS))
       .pipe(g.rename(`${post.slug}.html`))
       .pipe(gulp.dest(destPath));
